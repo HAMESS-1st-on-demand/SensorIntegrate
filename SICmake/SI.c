@@ -60,6 +60,31 @@ int ReadWaterLevelSensor(){
     return adc;
 }
 
+int readLightSensor(){ // 지정된 SPI 채널에서 ADC 값을 읽습니다.
+    int adc = 0;
+
+    setConfigBit(ADC_CHANNEL1);
+    digitalWrite(CS, LOW); // CS/SHDN bit을 0으로 만들어야 값을 얻을 수 있다.
+    wiringPiSPIDataRW(0, buffer, 3); // SPI 장치와 데이터 교환
+    digitalWrite(CS, HIGH); // CS/SHDN bit : CHANNEL 바뀔 때 1로 setting
+
+    adc = ((buffer[1] & 0x0F) << 8) + buffer[2]; // 데이터 교환 후 ADC 값 버퍼 추출, 반환
+    return adc;
+}
+
+int readRainSensor(){ // 지정된 SPI 채널에서 ADC 값을 읽습니다.
+    int adc = 0;
+
+    setConfigBit(ADC_CHANNEL2);
+    digitalWrite(CS, LOW); // CS/SHDN bit을 0으로 만들어야 값을 얻을 수 있다.
+    wiringPiSPIDataRW(0, buffer, 3); // SPI 장치와 데이터 교환
+    digitalWrite(CS, HIGH); // CS/SHDN bit : CHANNEL 바뀔 때 1로 setting
+
+    adc = ((buffer[1] & 0x0F) << 8) + buffer[2]; // 데이터 교환 후 ADC 값 버퍼 추출, 반환
+    return adc;
+}
+
+
 int main(void){
     if(setWiringPi()==-1) {
         printf("Failed to setup WiringPi\n");
@@ -68,8 +93,15 @@ int main(void){
 
     while(1){
         //채널 0: 미세먼지 센서 
+        int light = readLightSensor();
+        int rain = readRainSensor();
+        
         int dust = ReadDustSensor();
         int waterLev = ReadWaterLevelSensor();
+
+        printf("light = %d\n", light);
+        printf("rain = %d\n",rain);
+
         printf("Dust = %d\n", dust);
         printf("Water Level = %d\n", waterLev);
         delay(1000);
@@ -77,3 +109,5 @@ int main(void){
 
     return 0;
 }
+
+
