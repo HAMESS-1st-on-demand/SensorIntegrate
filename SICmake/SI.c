@@ -9,7 +9,7 @@
 #define ADC_CHANNEL3 2
 #define ADC_CHANNEL4 3 
 #define SPI_SPEED 1000000 // 1Mhz
-#define CS 10
+#define CS 1
 
 //For DustSensor
 #define SAMPLINGTIME 280
@@ -40,7 +40,7 @@ int setConfigBit(int channel){
 int ReadDustSensor(){
     int adc = 0;
 
-    setConfigBit(ADC_CHANNEL3);
+    setConfigBit(ADC_CHANNEL4);
 
     digitalWrite(LED,LOW);
     delayMicroseconds(SAMPLINGTIME); //미세먼지를 측정하기위한 샘플링 시간
@@ -58,7 +58,7 @@ int ReadDustSensor(){
 int ReadWaterLevelSensor(){ 
     int adc = 0;
 
-    setConfigBit(ADC_CHANNEL4);
+    setConfigBit(ADC_CHANNEL3);
     digitalWrite(CS, LOW); // CS/SHDN bit을 0으로 만들어야 값을 얻을 수 있다.
     wiringPiSPIDataRW(0, buffer, 3); // SPI 장치와 데이터 교환
     digitalWrite(CS, HIGH); // CS/SHDN bit : CHANNEL 바뀔 때 1로 setting
