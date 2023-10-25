@@ -5,9 +5,12 @@
 
 #include "SI.h"
 
-unsigned int dht_data[5];
-unsigned char buffer[3];
+unsigned int dht_data[5];   // 온습도 센서를 읽을 때 사용되는 데이터 배열
+unsigned char buffer[3];    // ADC와 통신하기 위해 사용되는 버퍼
 
+// SPI를 setup
+// SPI에 사용되는 CS, LED를 OUTPUT모드로 설정
+// 성공시 1, 실패시 -1 반환
 int setWiringPi(){
     if(wiringPiSetup() == -1) return -1;
     if(wiringPiSPISetup(0, SPI_SPEED) == -1) return -1;
@@ -17,6 +20,7 @@ int setWiringPi(){
     return 1;
 }
 
+// ADC 채널에 따른 주소를 buffer에 설정
 void setConfigBit(int channel)
 {
     buffer[0] = 0b110; // 채널에 따른 시작 바이트 설정
@@ -24,6 +28,7 @@ void setConfigBit(int channel)
     buffer[2] = 0;
 }
 
+// 미세먼지 센서로부터 아날로그 값을 읽어와 반환
 int readDustSensor(){
     int adc = 0;
 
@@ -42,6 +47,7 @@ int readDustSensor(){
     return adc;
 }
 
+// 수위 센서로부터 값을 읽어와 리턴
 int readWaterLevelSensor(){ 
     int adc = 0;
 
@@ -54,6 +60,7 @@ int readWaterLevelSensor(){
     return adc;
 }
 
+// 조도 센서로부터 값을 읽어와 리턴
 int readLightSensor(){ // 지정된 SPI 채널에서 ADC 값을 읽습니다.
     int adc = 0;
 
@@ -66,6 +73,7 @@ int readLightSensor(){ // 지정된 SPI 채널에서 ADC 값을 읽습니다.
     return adc;
 }
 
+// 빗물감지 센서로부터 값을 읽어와 리턴
 int readRainSensor(){ // 지정된 SPI 채널에서 ADC 값을 읽습니다.
     int adc = 0;
 
@@ -78,7 +86,7 @@ int readRainSensor(){ // 지정된 SPI 채널에서 ADC 값을 읽습니다.
     return adc;
 }
 
-
+// 온습도센서로부터 온도 정수값만 리턴
 int readDHTSensor(unsigned char gpio_pin)                    // dht데이터 읽기 함수
 {
 	uint8_t laststate	= HIGH;          // DHT핀의 상태 저장용 변수(현재 신호가 HIGH인지 LOW인지 확인하기 위한 용도)

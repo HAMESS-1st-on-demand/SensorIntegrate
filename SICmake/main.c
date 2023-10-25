@@ -3,7 +3,6 @@
 #include <SI.h>
 
 int main(void){
-
     if(setWiringPi()==-1) {
         printf("Failed to setup WiringPi\n");
         return -1;
