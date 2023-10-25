@@ -8,7 +8,16 @@ include(CTest)
 include(CPack)
 enable_testing()
 
-add_executable(SICmake SI.c)
-target_link_libraries(SICmake wiringPi)
-target_link_libraries(SICmake bcm2835)
-target_link_libraries(SICmake pthread)
+
+set(TARGET main)
+file(GLOB SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+link_libraries(wiringPi)
+add_executable(${TARGET} ${SRCS})
+
+
+# add_executable(SICmake SI.c)
+# target_link_libraries(SICmake wiringPi)
+# target_link_libraries(SICmake bcm2835)
+# target_link_libraries(SICmake pthread)
